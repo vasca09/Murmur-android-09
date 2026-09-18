@@ -1,0 +1,41 @@
+name: Build and publish APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Murmur debug APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Publish latest debug APK
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest-debug
+          name: Latest debug APK
+          body: |
+            Automatically built from the latest `main` branch commit.
+            This is a debug build for testing; install it manually on Android.
+          prerelease: true
+          make_latest: false
+          files: app/build/outputs/apk/debug/app-debug.apk
