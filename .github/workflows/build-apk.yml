@@ -11,7 +11,7 @@ permissions:
 jobs:
   build:
     name: Build Murmur debug APK
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out source
         uses: actions/checkout@v5
